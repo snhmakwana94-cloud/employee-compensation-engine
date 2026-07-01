@@ -1,25 +1,31 @@
 package com.sneha.compensation.app;
 
 import com.sneha.compensation.model.Employee;
+import com.sneha.compensation.model.EmployeeRegistry;
 
 public class CompensationApplication {
     public static void main(String[] args) {
 
-        Employee employee1 = new Employee(
-                101,
-                "Sneha Makwana",
-                "Engineering",
-                120000,
-                10);
+        EmployeeRegistry registory = new EmployeeRegistry("Hr Department");
 
-        Employee badEmployee = new Employee(
-                104,
-                "",
-                "Engineering",
-                -5000,
-                -1);
+        Employee emp1 = new Employee(1001, "Sneha", "IT", 50000.0, 5);
+        Employee emp2 = new Employee(1002, "John", "Finance", 60000.0, 7);
+        Employee emp3 = new Employee(1003, "Alice", "HR", 55000.0, 4);
 
-        System.out.println(employee1);
-        System.out.println(badEmployee);
+        EmployeeRegistry.registerEmployeeIntoList(emp1);
+        EmployeeRegistry.registerEmployeeIntoList(emp2);
+        EmployeeRegistry.registerEmployeeIntoList(emp3);
+
+        System.out.println("Registry Name: " + registory.getRegistryName());
+        System.out.println("Total Employees: " + EmployeeRegistry.getTotalEmployees());
+        System.out.println("Employee List: ");
+
+        EmployeeRegistry registory1 = new EmployeeRegistry("Sales Department");
+        System.out.println("Registry Name: " + registory1.getRegistryName());
+
+        for (Employee emp : EmployeeRegistry.getAllEmployees()) {
+            System.out.println(emp);
+        }
+
     }
 }
