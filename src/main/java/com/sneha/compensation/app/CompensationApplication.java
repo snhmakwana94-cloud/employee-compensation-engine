@@ -66,5 +66,24 @@ public class CompensationApplication {
 
         // end of EmployeeRegistry and Employee classes test code
 
+        // 3. nested class example
+
+        Employee.SalaryBand juniorBand = new Employee.SalaryBand("Junior", 30000, 50000);
+        Employee.SalaryBand seniorBand = new Employee.SalaryBand("Senior", 60000, 100000);
+
+        System.out.println("Junior Band: " + juniorBand);
+        System.out.println("Senior Band: " + seniorBand);
+
+        Boolean salaryToCheck = seniorBand.isSalaryWithinBand(120000);
+        System.out.println("Is salary within senior band? " + salaryToCheck);
+
+        emp1.setSalaryBand(juniorBand);
+        emp2.setSalaryBand(seniorBand);
+        emp3.setSalaryBand(seniorBand);
+
+        System.out.println("Employee 1 Salary Band: " + emp1.getSalaryBand());
+        System.out.println("Employee 2 Salary Band: " + emp2.getSalaryBand());
+        System.out.println("Employee 3 Salary Band: " + emp3.getSalaryBand());
+
     }
 }

@@ -125,4 +125,62 @@ public class Employee {
                 baseSalary,
                 experienceYears);
     }
+
+    private SalaryBand salaryband;
+
+    public SalaryBand getSalaryBand() {
+        return salaryband;
+    }
+
+    public void setSalaryBand(SalaryBand salaryband) {
+        this.salaryband = salaryband;
+    }
+
+    public static class SalaryBand {
+
+        private final String level;
+        private final double minSalary;
+        private final double maxSalary;
+
+        public SalaryBand(
+                String level,
+                double minSalary,
+                double maxSalary) {
+
+            this.level = level;
+            this.minSalary = minSalary;
+            this.maxSalary = maxSalary;
+        }
+
+        public String getLevel() {
+            return level;
+        }
+
+        public double getMinSalary() {
+            return minSalary;
+        }
+
+        public double getMaxSalary() {
+            return maxSalary;
+        }
+
+        public boolean isSalaryWithinBand(double salary) {
+            return salary >= minSalary && salary <= maxSalary;
+        }
+
+        @Override
+        public String toString() {
+
+            return String.format(
+                    "SalaryBand {%n" +
+                            "    level='%s',%n" +
+                            "    minSalary=%.2f,%n" +
+                            "    maxSalary=%.2f%n" +
+                            "}%n",
+                    level,
+                    minSalary,
+                    maxSalary);
+        }
+    }
+
 }
