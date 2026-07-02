@@ -1,2 +1,8 @@
+com\sneha\compensation\model\Employee$SalaryBand.class
 com\sneha\compensation\model\Employee.class
+com\sneha\compensation\service\CompensationCalculator.class
+com\sneha\compensation\recordmodel\TestRecord.class
+com\sneha\compensation\app\CompensationApplication.class
+com\sneha\compensation\recordmodel\CompensationReport.class
+com\sneha\compensation\model\EmployeeRegistry.class
 com\sneha\compensation\App.class
