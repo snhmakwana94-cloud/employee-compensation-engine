@@ -1,5 +1,6 @@
 package com.sneha.compensation.app;
 
+import com.sneha.compensation.analytics.CompensationAnalytics;
 import com.sneha.compensation.model.Employee;
 import com.sneha.compensation.model.EmployeeRegistry;
 import com.sneha.compensation.model.EmployeeCompensationPackage;
@@ -145,5 +146,46 @@ public class CompensationApplication {
                 Optional<Employee> optionalEmployee = repository.findById(1002);
                 System.out.println("Found Employee: " + optionalEmployee.orElse(null));
 
+                // end of list, arraylist, optional, and lambda expression example
+
+                // 7. Compensation Analysis using Streams and Lambda Expressions
+
+                CompensationAnalytics analytics = new CompensationAnalytics(repository.findAll());
+                System.out.println("Employees with salary above 100000:");
+                analytics.findEmployeesWithSalaryAbove(50000).forEach(System.out::println);
+                System.out.println("Employees in HR department:");
+                analytics.findEmployeesByDepartment("HR").forEach(System.out::println);
+
+                System.out.println("Highest paid employee:");
+                Optional<Employee> highestPaidEmployee = analytics.findHighestPaidEmployee();
+                highestPaidEmployee.ifPresent(System.out::println);
+
+                System.out.println("Lowest paid employee:");
+                Optional<Employee> lowestPaidEmployee = analytics.findLowestPaidEmployee();
+                lowestPaidEmployee.ifPresent(System.out::println);
+
+                System.out.println("Average salary of employees:");
+                double averageSalaryOfEmployees = analytics.calculateAverageSalary();
+                System.out.println(averageSalaryOfEmployees);
+
+                System.out.println("Total salary of employees:");
+                double totalSalaryOfEmployees = analytics.calculateTotalSalary();
+                System.out.println(totalSalaryOfEmployees);
+
+                System.out.println("Count of employees with experience >= 5 years:");
+                double experiencedEmployeesCount = analytics.countExperiencedEmployees(5);
+                System.out.println(experiencedEmployeesCount);
+
+                System.out.println("Employees with experience above 5 years:");
+                analytics.findEmployeesWithExperienceAbove(5).forEach(System.out::println);
+
+                System.out.println("Decending order of employees based on salary:");
+                analytics.sortBySalaryDescending().forEach(System.out::println);
+
+                System.out.println("Salary Statistics:");
+                System.out.println(analytics.getSalaryStatistics());
+
+                System.out.println("Employee Names:");
+                analytics.getEmployeeNames().forEach(System.out::println);
         }
 }
