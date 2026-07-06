@@ -2,9 +2,14 @@ package com.sneha.compensation.app;
 
 import com.sneha.compensation.model.Employee;
 import com.sneha.compensation.model.EmployeeRegistry;
+import com.sneha.compensation.model.EmployeeCompensationPackage;
 import com.sneha.compensation.service.CompensationCalculator;
 import com.sneha.compensation.recordmodel.BonusResult;
 import com.sneha.compensation.recordmodel.CompensationReport;
+import com.sneha.compensation.repository.EmployeeRepository;
+import com.sneha.compensation.repository.FileEmployeeRepository;
+
+import java.util.Optional;
 
 public class CompensationApplication {
         public static void main(String[] args) {
@@ -110,10 +115,35 @@ public class CompensationApplication {
                 System.out.println(report.employeeName());
                 System.out.println(report.totalCompensation());
 
-                // bonus calucation record example
+                // bonus calculation record example
 
                 BonusResult result = new BonusResult(15000, "HIGH_PERFORMER");
                 System.out.println(result);
+
+                // end of record class example
+
+                // 5. final class example
+                EmployeeCompensationPackage package1 = new EmployeeCompensationPackage(
+                                emp1.getEmployeeId(),
+                                emp1.getName(),
+                                emp1.getBaseSalary(),
+                                bonus4);
+
+                System.out.println("Employee Compensation Package: " + package1);
+
+                // end of final class example
+
+                // 6.list, arraylist, optional, and lambda expression example
+
+                EmployeeRepository repository = new FileEmployeeRepository();
+                repository.save(emp1);
+                repository.save(emp2);
+                repository.save(emp3);
+
+                repository.findAll().forEach(System.out::println);
+
+                Optional<Employee> optionalEmployee = repository.findById(1002);
+                System.out.println("Found Employee: " + optionalEmployee.orElse(null));
 
         }
 }
