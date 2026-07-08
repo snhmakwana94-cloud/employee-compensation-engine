@@ -18,20 +18,60 @@ public class FileEmployeeRepository
 
     private final List<Employee> employees = new ArrayList<>();
 
-    private void saveToFile(Employee employee) {
+    public FileEmployeeRepository() {
+
+        loadEmployeesFromFile();
+
+    }
+
+    private void loadEmployeesFromFile() {
+        if (!Files.exists(FILE_PATH)) {
+            return;
+        }
 
         try {
 
-            String line = employee.getEmployeeId()
-                    + ","
-                    + employee.getName()
-                    + System.lineSeparator();
+            List<String> lines = Files.readAllLines(FILE_PATH);
 
-            Files.writeString(
+            for (String line : lines) {
+                String[] data = line.split(",");
+                Employee employee = new Employee(
+                        Integer.parseInt(data[0]),
+                        data[1],
+                        data[2],
+                        Double.parseDouble(data[3]),
+                        Integer.parseInt(data[4]));
+                employees.add(employee);
+            }
+
+        } catch (Exception exception) {
+
+            exception.printStackTrace();
+        }
+    }
+
+    private void rewriteFile() {
+
+        try {
+
+            List<String> lines = new ArrayList<>();
+
+            for (Employee employee : employees) {
+
+                lines.add(String.format(
+                        "%d,%s,%s,%.2f,%d",
+                        employee.getEmployeeId(),
+                        employee.getName(),
+                        employee.getDepartment(),
+                        employee.getBaseSalary(),
+                        employee.getExperienceYears()));
+            }
+
+            Files.write(
                     FILE_PATH,
-                    line,
+                    lines,
                     StandardOpenOption.CREATE,
-                    StandardOpenOption.APPEND);
+                    StandardOpenOption.TRUNCATE_EXISTING);
 
         } catch (Exception exception) {
 
@@ -43,7 +83,7 @@ public class FileEmployeeRepository
     public void save(Employee employee) {
 
         employees.add(employee);
-        saveToFile(employee);
+        rewriteFile();
     }
 
     @Override
@@ -68,10 +108,15 @@ public class FileEmployeeRepository
     }
 
     @Override
-    public boolean deleteById(
-            int employeeId) {
+    public boolean deleteById(int employeeId) {
 
-        return employees.removeIf(
+        boolean removed = employees.removeIf(
                 employee -> employee.getEmployeeId() == employeeId);
+
+        if (removed) {
+            rewriteFile();
+        }
+
+        return removed;
     }
 }
