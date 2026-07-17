@@ -5,9 +5,11 @@ import com.sneha.compensation.model.Employee;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import com.sneha.compensation.exception.RepositoryException;
 
 public class FileEmployeeRepository
         implements EmployeeRepository {
@@ -44,9 +46,11 @@ public class FileEmployeeRepository
                 employees.add(employee);
             }
 
-        } catch (Exception exception) {
+        } catch (IOException exception) {
 
-            exception.printStackTrace();
+            throw new RepositoryException(
+                    "Unable to load employee data.",
+                    exception);
         }
     }
 
@@ -67,15 +71,18 @@ public class FileEmployeeRepository
                         employee.getExperienceYears()));
             }
 
+            Files.createDirectories(FILE_PATH.getParent());
             Files.write(
                     FILE_PATH,
                     lines,
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING);
 
-        } catch (Exception exception) {
+        } catch (IOException exception) {
 
-            exception.printStackTrace();
+            throw new RepositoryException(
+                    "Unable to rewrite employee file.",
+                    exception);
         }
     }
 

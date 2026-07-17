@@ -1,5 +1,11 @@
 package com.sneha.compensation.model;
 
+import com.sneha.compensation.exception.InvalidEmployeeIdException;
+import com.sneha.compensation.exception.InvalidEmployeeNameException;
+import com.sneha.compensation.exception.InvalidExperienceException;
+import com.sneha.compensation.exception.InvalidSalaryException;
+import com.sneha.compensation.exception.DepartmentValidationException;
+
 public class Employee {
 
     private int employeeId;
@@ -40,12 +46,12 @@ public class Employee {
     public void setEmployeeId(int employeeId) {
 
         if (employeeId <= 0) {
-            throw new IllegalArgumentException(
+            throw new InvalidEmployeeIdException(
                     "Employee ID must be greater than zero.");
         }
 
         if (employeeId > 9000) {
-            throw new IllegalArgumentException(
+            throw new InvalidEmployeeIdException(
                     "Employee ID must be less than or equal to 9000.");
         }
 
@@ -59,7 +65,7 @@ public class Employee {
     public void setName(String name) {
 
         if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException(
+            throw new InvalidEmployeeNameException(
                     "Employee name cannot be empty.");
         }
 
@@ -73,7 +79,7 @@ public class Employee {
     public void setDepartment(String department) {
 
         if (department == null || department.isBlank()) {
-            throw new IllegalArgumentException(
+            throw new DepartmentValidationException(
                     "Department cannot be empty.");
         }
 
@@ -87,7 +93,7 @@ public class Employee {
     public void setBaseSalary(double baseSalary) {
 
         if (baseSalary < 0) {
-            throw new IllegalArgumentException(
+            throw new InvalidSalaryException(
                     "Salary cannot be negative.");
         }
 
@@ -101,7 +107,7 @@ public class Employee {
     public void setExperienceYears(int experienceYears) {
 
         if (experienceYears < 0) {
-            throw new IllegalArgumentException(
+            throw new InvalidExperienceException(
                     "Experience cannot be negative.");
         }
 

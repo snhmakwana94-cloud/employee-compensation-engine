@@ -1,10 +1,17 @@
 package com.sneha.compensation.service;
 
 import com.sneha.compensation.model.Employee;
+import com.sneha.compensation.strategy.CompensationStrategy;
 
 public final class CompensationCalculator {
 
-    private CompensationCalculator() {
+    private final CompensationStrategy strategy;
+
+    public CompensationCalculator(
+            CompensationStrategy strategy) {
+
+        this.strategy = strategy;
+
     }
 
     /*
@@ -65,5 +72,12 @@ public final class CompensationCalculator {
         }
 
         return total / bonuses.length;
+    }
+
+    public double calculateBonusUsingStrategy(
+            Employee employee) {
+
+        return strategy.calculateBonus(employee);
+
     }
 }

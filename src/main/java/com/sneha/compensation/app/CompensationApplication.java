@@ -11,12 +11,69 @@ import com.sneha.compensation.repository.EmployeeRepository;
 import com.sneha.compensation.repository.FileEmployeeRepository;
 import com.sneha.compensation.ui.ConsoleDashboard;
 import com.sneha.compensation.service.EmployeeService;
+import com.sneha.compensation.strategy.CompensationStrategy;
+import com.sneha.compensation.strategy.FixedBonusStrategy;
+import com.sneha.compensation.strategy.PercentageBonusStrategy;
+import com.sneha.compensation.strategy.SeniorEmployeeStrategy;
 import com.sneha.compensation.dto.AnalyticsReport;
+import com.sneha.compensation.exception.EmployeeValidationException;
 
 import java.util.Optional;
 
 public class CompensationApplication {
         public static void main(String[] args) {
+
+                Employee employee = new Employee(
+                                102,
+                                "Rahul",
+                                "Finance",
+                                80000,
+                                6);
+
+                System.out.println("Employee: " + employee.getName() + ", Experience: " + employee.getExperienceYears()
+                                + " years");
+
+                // before java 8, we would have to create separate classes for each strategy and
+                // use them like this:
+                CompensationStrategy fixedStrategy = new FixedBonusStrategy(5000);
+                System.out.println("Bonus calculated using fixed strategy: " + fixedStrategy.calculateBonus(employee));
+
+                CompensationStrategy percentageStrategy = new PercentageBonusStrategy(15);
+                System.out.println("Bonus calculated using percentage strategy: "
+                                + percentageStrategy.calculateBonus(employee));
+
+                CompensationStrategy seniorStrategy = new SeniorEmployeeStrategy();
+                System.out.println("Bonus calculated using senior employee strategy: "
+                                + seniorStrategy.calculateBonus(employee));
+
+                // with java 8 and later, we could use lambda expressions to define strategies
+                // inline, but here we are using concrete classes
+
+                CompensationStrategy strategy = emp -> emp.getBaseSalary() * 0.15;
+                CompensationCalculator calculator = new CompensationCalculator(strategy);
+
+                CompensationStrategy FixedSalaryStrategy = emp -> 5000;
+                CompensationCalculator fixedCalculator = new CompensationCalculator(FixedSalaryStrategy);
+
+                CompensationStrategy SeniorEMpstrategy = emp -> {
+
+                        if (emp.getExperienceYears() >= 10) {
+                                return emp.getBaseSalary() * 0.25;
+                        }
+
+                        return emp.getBaseSalary() * 0.10;
+
+                };
+                CompensationCalculator seniorCalculator = new CompensationCalculator(SeniorEMpstrategy);
+
+                double bonus = calculator.calculateBonusUsingStrategy(employee);
+                double fixedBonus = fixedCalculator.calculateBonusUsingStrategy(employee);
+                double seniorBonus = seniorCalculator.calculateBonusUsingStrategy(employee);
+
+                System.out.println("Bonus calculated using lambda expression strategy: " + bonus);
+                System.out.println("Bonus calculated using fixed salary lambda strategy: " + fixedBonus);
+                System.out.println("Bonus calculated using senior employee lambda strategy: " + seniorBonus);
+                // end of strategy demonstration
 
                 ConsoleDashboard dashboard = new ConsoleDashboard();
                 EmployeeRepository repository = new FileEmployeeRepository();
@@ -30,7 +87,18 @@ public class CompensationApplication {
 
                         switch (choice) {
 
-                                case 1 -> registerEmployee(dashboard, employeeService);
+                                case 1 -> {
+                                        try {
+                                                registerEmployee(dashboard, employeeService);
+                                                System.out.println("Employee registered successfully: " + employee);
+                                        } catch (EmployeeValidationException exception) {
+
+                                                System.out.println(
+                                                                "\nRegistration failed: "
+                                                                                + exception.getMessage());
+                                        }
+                                }
+
                                 case 2 -> viewEmployees(dashboard, employeeService);
 
                                 case 3 -> searchEmployee(dashboard, employeeService);
